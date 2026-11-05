@@ -91,7 +91,7 @@ struct DocumentEditorView: View {
 
     private func savePage() async {
         guard let ciImage = CIImage(image: image),
-              let encoded = try? awaitcorrection.correct(image: ciImage, quad: quad),
+              let encoded = try? await correction.correct(image: ciImage, quad: quad),
               let data = ImageCodec.jpegData(enhancer.render(encoded, mode: mode), quality: 0.92) else {
             errorMessage = AppError.imageEncodingFailed.localizedDescription
             return
@@ -104,7 +104,7 @@ struct DocumentEditorView: View {
         }
         let url = store.makeImageURL(for: documentID, pageID: UUID())
         do {
-            try data.write(to: url, options: .atomic)
+            try data.write(to: url, options: Data.WritingOptions.atomic)
             try store.save(ScanDocument(id: documentID, pages: [
                 ScannedPage(originalImagePath: url.path, processedImagePath: url.path, cornerQuad: quad, enhancementMode: mode)
             ]))
