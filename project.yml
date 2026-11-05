@@ -10,5 +10,6 @@ targets:
       - path: CopyScanPDF
         excludes:
           - "App/Info.plist"
+          - "Tests"
     settings:
       INFOPLIST_FILE: CopyScanPDF/App/Info.plist
