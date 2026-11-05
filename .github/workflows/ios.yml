@@ -27,7 +27,7 @@ jobs:
         run: |
           xcodebuild build \
             -project *.xcodeproj \
-            -scheme "Copy Scan pdf" \
+            -scheme "CopyScanPDF" \
             -destination 'generic/platform=iOS' \
             -configuration Release \
             -derivedDataPath build \
