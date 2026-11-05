@@ -8,5 +8,7 @@ targets:
     deploymentTarget: "16.0"
     sources: 
       - path: CopyScanPDF
+        excludes:
+          - "**/Info.plist"
     settings:
       INFOPLIST_FILE: CopyScanPDF/Info.plist
