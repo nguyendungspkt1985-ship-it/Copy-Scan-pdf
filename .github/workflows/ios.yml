@@ -1,51 +1,48 @@
-name: iOS build and tests
+name: Build iOS IPA
 
 on:
   push:
+    branches: [ main ]
   pull_request:
-  workflow_dispatch:
-
-concurrency:
-  group: ios-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-ios:
     runs-on: macos-15
-    timeout-minutes: 45
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
+    - name: Install XcodeGen
+      run: brew install xcodegen
 
-      - name: Generate Xcode project
-        working-directory: CopyScanPDF
-        run: xcodegen generate
+    - name: Generate Xcode Project
+      run: xcodegen generate
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+    - name: Build iOS App (.app)
+      run: |
+        xcodebuild build \
+          -project *.xcodeproj \
+          -scheme "Copy Scan pdf" \
+          -destination 'generic/platform=iOS' \
+          -configuration Release \
+          -derivedDataPath build \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
 
-      - name: Build and test on iOS simulator
-        working-directory: CopyScanPDF
-        run: |
-          xcodebuild \
-            -project CopyScanPDF.xcodeproj \
-            -scheme CopyScanPDF \
-            -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 13,OS=16.4' \
-            CODE_SIGNING_ALLOWED=NO \
-            build test
+    - name: Package to IPA
+      run: |
+        mkdir -p Payload
+        cp -R build/Build/Products/Release-iphoneos/*.app Payload/
+        zip -r CopyScanPDF.ipa Payload
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-test-results
-          path: CopyScanPDF/build
-          if-no-files-found: ignore
+    - name: Upload IPA Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CopyScanPDF-ipa
+        path: CopyScanPDF.ipa
