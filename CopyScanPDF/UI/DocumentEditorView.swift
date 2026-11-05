@@ -91,7 +91,7 @@ struct DocumentEditorView: View {
 
     private func savePage() async {
         guard let ciImage = CIImage(image: image),
-              let encoded = try? correction.correct(image: ciImage, quad: quad),
+              let encoded = try? awaitcorrection.correct(image: ciImage, quad: quad),
               let data = ImageCodec.jpegData(enhancer.render(encoded, mode: mode), quality: 0.92) else {
             errorMessage = AppError.imageEncodingFailed.localizedDescription
             return

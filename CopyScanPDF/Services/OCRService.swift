@@ -4,7 +4,7 @@ import Vision
 final class OCRService {
     func supportedLanguages() -> [String] {
         let request = VNRecognizeTextRequest()
-        let supported = (try? request.supportedRecognitionLanguages(for: .accurate, revision: VNRecognizeTextRequestRevision3)) ?? []
+        let supported = (try? VNRecognizeTextRequest.supportedRecognitionLanguages(for: .accurate, revision: VNRecognizeTextRequestRevision3)) ?? []
         let priority = ["vi-VN", "vi", "en-US", "en"]
         let others = supported.filter { !priority.contains($0) }
         return priority.filter { supported.contains($0) } + others
