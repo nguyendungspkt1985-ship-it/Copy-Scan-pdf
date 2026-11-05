@@ -1,0 +1,31 @@
+name: CopyScanPDF
+options:
+  deploymentTarget: "16.0"
+  bundleIdPrefix: com.copyscanpdf
+targets:
+  CopyScanPDF:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Models
+      - path: Services
+      - path: Support
+      - path: UI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.copyscanpdf.app
+        INFOPLIST_FILE: App/Info.plist
+        SWIFT_VERSION: 5.0
+        TARGETED_DEVICE_FAMILY: 1
+        IPHONEOS_DEPLOYMENT_TARGET: 16.0
+    scheme:
+      testTargets:
+        - CopyScanPDFTests
+  CopyScanPDFTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: CopyScanPDF

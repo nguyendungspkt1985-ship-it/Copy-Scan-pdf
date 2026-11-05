@@ -1,0 +1,51 @@
+name: iOS build and tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: CopyScanPDF
+        run: xcodegen generate
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build and test on iOS simulator
+        working-directory: CopyScanPDF
+        run: |
+          xcodebuild \
+            -project CopyScanPDF.xcodeproj \
+            -scheme CopyScanPDF \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 13,OS=16.4' \
+            CODE_SIGNING_ALLOWED=NO \
+            build test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-results
+          path: CopyScanPDF/build
+          if-no-files-found: ignore

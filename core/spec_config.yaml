@@ -1,0 +1,15 @@
+project:
+  name: "Copy Scan PDF Offline"
+  path: "G:\\Github_speckit\\Module\\Copy Scan pdf"
+  target_device: "iPhone (iOS / Pythonista / Local Runtime)"
+  execution_mode: "100% Offline / Zero-Internet Guarantee"
+
+spec_kit:
+  framework: "GitHub Spec Kit"
+  version: "1.0.0"
+
+processing_standards:
+  edge_detection: "Canny Edge + Contour Approximation (Custom OpenCV Algorithm)"
+  magic_color: "Morphological Shading Removal + CLAHE + Adaptive Thresholding"
+  pdf_generation: "PyMuPDF / ReportLab Local Engine"
+  ocr_engine: "Offline Tesseract / Local Model Integration"

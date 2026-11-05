@@ -1,0 +1,19 @@
+G:\Github_speckit\Module\Copy Scan pdf\
+│
+├── .spec/                      # Cấu hình GitHub Spec Kit
+│   ├── spec_config.yaml        # Định nghĩa thông số kỹ thuật & ràng buộc offline
+│   └── requirements.md         # Yêu cầu kỹ thuật chi tiết từng module
+│
+├── core/                       # Lõi xử lý logic (Python / Framework local)
+│   ├── __init__.py
+│   ├── camera_capture.py       # Quản lý luồng chụp ảnh & truy xuất camera
+│   ├── edge_detection.py       # Tự động phát hiện biên & canh lề (OpenCV/Edge logic)
+│   ├── magic_color.py          # Bộ lọc Magic Color (Adaptive Thresholding / Binarization)
+│   ├── ocr_engine.py           # Động cơ OCR chạy offline trên thiết bị
+│   └── pdf_assembler.py        # Nối trang & biên soạn file PDF hoàn chỉnh
+│
+├── ios_shortcuts/              # Tích hợp phím tắt iOS (iOS Shortcuts bridge)
+│   └── scan_workflow.shortcut  # Kịch bản tự động hóa camera & lưu file local
+│
+└── tests/                      # Kiểm thử local trên thiết bị
+    └── test_pipeline.py        # Script test luồng xử lý ảnh trước khi đóng gói
